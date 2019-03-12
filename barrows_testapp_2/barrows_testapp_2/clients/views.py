@@ -18,9 +18,9 @@ def save_client_form(request, form, template_name):
         if form.is_valid():
             form.save()
             data['form_is_valid'] = True
-            books = Client.objects.all()
+            clients = Client.objects.all()
             data['html_client_list'] = render_to_string('clients/includes/partial_client_list.html', {
-                'books': books
+                'clients': clients
             })
         else:
             data['form_is_valid'] = False
@@ -29,34 +29,34 @@ def save_client_form(request, form, template_name):
     return JsonResponse(data)
 
 @login_required
-def book_create(request):
+def client_create(request):
     if request.method == 'POST':
         form = ClientForm(request.POST)
     else:
         form = ClientForm()
-    return save_client_form(request, form, 'books/includes/partial_book_create.html')
+    return save_client_form(request, form, 'clients/includes/partial_clients_create.html')
 
 @login_required
-def book_update(request, pk):
-    book = get_object_or_404(Client, pk=pk)
+def client_update(request, pk):
+    client = get_object_or_404(Client, pk=pk)
     if request.method == 'POST':
-        form = ClientForm(request.POST, instance=book)
+        form = ClientForm(request.POST, instance=client)
     else:
-        form = ClientForm(instance=book)
-    return save_client_form(request, form, 'books/includes/partial_book_update.html')
+        form = ClientForm(instance=client)
+    return save_client_form(request, form, 'clients/includes/partial_clients_update.html')
 
 @login_required
-def book_delete(request, pk):
-    book = get_object_or_404(Client, pk=pk)
+def client_delete(request, pk):
+    client = get_object_or_404(Client, pk=pk)
     data = dict()
     if request.method == 'POST':
-        book.delete()
+        #client.delete()
         data['form_is_valid'] = True
-        books = Client.objects.all()
-        data['html_client_list'] = render_to_string('books/includes/partial_book_list.html', {
-            'books': books
+        clients = Client.objects.all()
+        data['html_client_list'] = render_to_string('clients/includes/partial_clients_list.html', {
+            'clients': clients
         })
     else:
-        context = {'book': book}
-        data['html_form'] = render_to_string('books/includes/partial_book_delete.html', context, request=request)
+        context = {'clients': clients}
+        data['html_form'] = render_to_string('clients/includes/partial_client_delete.html', context, request=request)
     return JsonResponse(data)
